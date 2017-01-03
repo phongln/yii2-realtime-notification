@@ -123,8 +123,8 @@ class SiteController extends Controller
     {
         $req = Yii::$app->request;
         if($req->isAjax && $req->isPost) {
-            $hour = $req->post('hour');
-            $minute = $req->post('minute');
+            $hour = ($req->post('hour') < 10) ? '0' . $req->post('hour') : $req->post('hour');
+            $minute = ($req->post('minute') < 10) ? '0' . $req->post('minute') : $req->post('minute');
 
             return Yii::$app->redis->executeCommand('PUBLISH', [
                 'channel' => 'notification',

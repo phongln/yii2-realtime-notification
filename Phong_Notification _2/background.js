@@ -9,10 +9,9 @@
 */
 function show() {
   var time = /(..)(:..)/.exec(new Date());     // The prettyprinted time.
-  var defaultAlarm = (time[1] % 12 || 12) + time[2];
-  var _hour = (localStorage.hour % 12 || 12) + ":" + localStorage.minute;
+  var _hour = localStorage.hour + ":" + localStorage.minute;
   var body = "Default schedule time is: " + _hour;
-  var mess = "Start notification.";
+  var mess = "Start notification";
 
   if (JSON.parse(localStorage.firstRun)) {
     new Notification(mess, {
@@ -22,42 +21,42 @@ function show() {
     localStorage.firstRun = false;
   }
   if (JSON.parse(localStorage.firedNow)) {
-    body = "Schedule: " + _hour;
-    mess = 'Change schedule time.';
+    body = "Schedule time at: " + _hour;
+    mess = 'Change schedule time';
     new Notification(mess, {
       icon: '64.png',
       body: body
     });
     localStorage.firedNow = false;
   }
-  if(_hour == defaultAlarm) {
+  if(_hour == time[0]) {
     mess = 'Notification from schedule time';
     new Notification(mess, {
       icon: '64.png',
-      body: time[0]
+      body: _hour
     });
   }
 
   if(time[0] == "08:30") {
-    mess = 'Time to start working.';
+    mess = 'Time to start working';
     new Notification(mess, {
       icon: '64.png',
       body: time[0]
     });
   } else if(time[0] == "12:00") {
-    mess = 'Time for lunch.';
+    mess = 'Time for lunch';
     new Notification(mess, {
       icon: '64.png',
       body: time[0]
     });
   } else if(time[0] == "13:30") {
-    mess = 'Time for get back to work.';
+    mess = 'Time for get back to work';
     new Notification(mess, {
       icon: '64.png',
       body: time[0]
     });
   } else if(time[0] == "18:00") {
-    mess = 'Time to go home.';
+    mess = 'Time to go home';
     new Notification(mess, {
       icon: '64.png',
       body: time[0]

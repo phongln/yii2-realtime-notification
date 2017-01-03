@@ -5,7 +5,7 @@ $(document).ready(function () {
     var socket = io.connect('http://127.0.0.1:8890');
     socket.on('notification', function (data) {
         data = $.parseJSON(data);
-        var mess = "hour: " + data.hour + " | minute: " + data.minute;
+        var mess = "Schedule time at: " + data.hour + ":" + data.minute;
         $('#changedList').append($('<li>').text(mess));
     });
     $("#pushBtn").click(function () {
