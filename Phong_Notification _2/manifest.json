@@ -1,0 +1,21 @@
+{
+  "name": "PhongLe-Notification-Demo",
+  "version": "1.1",
+  "description":
+    "Shows off desktop notifications, which are  windows that pop up on the desktop.",
+  "icons": {"16": "16.png", "48": "48.png", "64": "64.png"},
+  "permissions": [
+    "notifications",
+    "https://cdn.socket.io/",
+    "http://127.0.0.1:8890/"
+  ],
+  "options_page": "options.html",
+  "background": { "scripts": ["jquery-3.1.1.min.js", "socketio.js", "background.js"] },
+  "manifest_version": 2,
+
+  // crbug.com/134315
+  "web_accessible_resources": [
+    "48.png",
+    "64.png"
+  ]
+}

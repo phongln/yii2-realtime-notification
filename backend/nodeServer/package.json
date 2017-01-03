@@ -1,0 +1,17 @@
+{
+  "name": "phong_nodejs",
+  "version": "1.0.0",
+  "description": "Phong's First NodeJS Application",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"NodeJS is running.\"",
+    "start": "node main.js"
+  },
+  "author": "PhongLN <phongln@vinixcorp.com.vn>",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0",
+    "redis": "^2.6.3",
+    "socket.io": "^1.7.2"
+  }
+}
