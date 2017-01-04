@@ -114,24 +114,4 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
-
-    /**
-     * Displays notification page.
-     *
-     * @return string
-     */
-    public function actionSetNotification()
-    {
-        $req = Yii::$app->request;
-        if($req->isAjax && $req->isPost) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            if($req->post('hour') > 23 || $req->post('hour') < 0) return ['success' => 0, 'message' => 'Please enter a valid hour in 24-hour format'];
-            if($req->post('minute') > 59 || $req->post('minute') < 0) return ['success' => 0, 'message' => 'Please enter a valid minute'];
-            $hour = ($req->post('hour') < 10) ? '0' . $req->post('hour') : $req->post('hour');
-            $minute = ($req->post('minute') < 10) ? '0' . $req->post('minute') : $req->post('minute');
-
-            return ['hour' => $hour, 'minute' => $minute];
-        }
-        return $this->render('set-notification');
-    }
 }
