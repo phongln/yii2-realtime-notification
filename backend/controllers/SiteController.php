@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\ChangePasswordForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
@@ -111,6 +112,25 @@ class SiteController extends Controller
             return $this->refresh();
         }
         return $this->render('contact', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Change password action.
+     *
+     * @return string
+     */
+    public function actionChangePassword()
+    {
+        $model = new ChangePasswordForm();
+        if ($model->load(Yii::$app->request->post()) && $model->changePassword()) {
+            Yii::$app->session->setFlash('success-message', 'Password of user ' . Yii::$app->user->identity->username . ' was changed successfully.');
+
+            Yii::$app->user->logout();
+            return $this->goHome();
+        }
+        return $this->render('change-password', [
             'model' => $model,
         ]);
     }

@@ -13,11 +13,23 @@ use yii\helpers\Html;
 
         <?= \yii\bootstrap\Html::hiddenInput('tab', 'default') ?>
 
+        <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+
         <?= $form->field($model, 'message')->textInput(['maxlength' => true]) ?>
 
-        <?= $form->field($model, 'time')->textInput() ?>
-
         <?= $form->field($model, 'url')->textInput() ?>
+
+        <?= $form->field($model, 'time')->widget(\kartik\widgets\TimePicker::className(), [
+            'addonOptions' => [
+                'asButton' => true,
+                'buttonOptions' => ['class' => 'btn btn-info']
+            ],
+            'pluginOptions' => [
+                'showSeconds' => false,
+                'showMeridian' => false,
+                'minuteStep' => 1,
+            ]
+        ]) ?>
 
         <?= $form->field($model, 'status')->hiddenInput(['value' => 1])->label(false) ?>
 

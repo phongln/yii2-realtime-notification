@@ -1,0 +1,22 @@
+{
+  "name": "Somo Notification for Chrome",
+  "version": "1.1",
+  "description":
+    "Shows off desktop notifications, which are notification from http://somo.vn/",
+  "icons": {"16": "16.png", "48": "48.png", "64": "64.png"},
+  "permissions": [
+    "notifications",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "browser_action" : {
+    "default_icon": "64.png"
+  },
+  "background": { "scripts": ["jquery-3.1.1.min.js", "socketio.js", "background.js"] },
+  "manifest_version": 2,
+
+  "web_accessible_resources": [
+    "48.png",
+    "64.png"
+  ]
+}

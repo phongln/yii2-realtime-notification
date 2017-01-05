@@ -3,6 +3,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
 const HOSTNAME = '127.0.0.1';
+// const HOSTNAME = '125.212.210.113';
 const PORT = 8890;
 
 server.listen(PORT, HOSTNAME, function () {
@@ -11,6 +12,7 @@ server.listen(PORT, HOSTNAME, function () {
 
 io.on('connection', function(socket) {
     socket.on('notification', function(data){
+        console.log(data);
         io.emit('notification', data);
     });
 });

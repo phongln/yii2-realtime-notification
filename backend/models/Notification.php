@@ -12,6 +12,7 @@ use yii\db\Expression;
  * This is the model class for table "notification".
  *
  * @property integer $id
+ * @property string $title
  * @property string $message
  * @property string $time
  * @property integer $status
@@ -40,11 +41,11 @@ class Notification extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['message', 'time'], 'required'],
+            [['title', 'message', 'time'], 'required'],
             [['time', 'created_at', 'updated_at'], 'safe'],
             [['status', 'created_by', 'updated_by'], 'integer'],
             [['url'], 'string'],
-            [['message'], 'string', 'max' => 255],
+            [['message', 'title'], 'string', 'max' => 255],
             ['time', 'match', 'pattern' => '/([0-1][0-9]|2[0-3])(:[0-5][0-9])/'],
             [['time'], 'string', 'max' => 5],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
@@ -59,6 +60,7 @@ class Notification extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'title' => 'Title',
             'message' => 'Message',
             'time' => 'Time',
             'status' => 'Status',
@@ -118,6 +120,7 @@ class Notification extends \yii\db\ActiveRecord
 
         foreach($notifications as $notification) {
             $data[] = [
+                'title' => $notification->title,
                 'message' => $notification->message,
                 'time' => $notification->time,
                 'url' => $notification->url

@@ -3,7 +3,6 @@
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\NotificationSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-\app\assets\NotificationAsset::register($this);
 $this->title = 'Notifications';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -45,4 +44,46 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<?php
+$param_io_connect = Yii::$app->params['io_connect'];
+$js=<<<JS
+$(document).ready(function () {
+    var socket = io.connect('$param_io_connect');
+    function submitFormByAjax(form) {
+        $.ajax({
+            url: form.attr('action'),
+            type: 'post',
+            data: form.serialize(),
+            success: function (resp) {
+                socket.emit('notification', resp);
+                window.location.href = resp.reloadLink;
+            }
+        });
+    }
 
+    $("#pushBtn").click(function () {
+        var currentTime = /(..)(:..)/.exec(new Date());
+        var parentPushed = $(".pushedNotification").parents(".field-notification-time");
+        if($('#instantPushed').is(":checked")) {
+            $('#instantPushed').val(1);
+            $(".pushedNotification").val(currentTime[0]);        
+            $(parentPushed).removeClass("show");
+            $(parentPushed).addClass("hide");
+        } else {
+            $('#instantPushed').val(0);
+            $(".pushedNotification").val('');
+            $(parentPushed).removeClass("hide");
+            $(parentPushed).addClass("show");
+        }
+        submitFormByAjax($('#notificationForm'));
+    });
+    $("#changeBtn").click(function () {
+        submitFormByAjax($('#defaultNotificationForm'));
+    });
+    $("#updateBtn").click(function () {
+        submitFormByAjax($('#updateNotificationForm'));
+    });
+});
+JS;
+$this->registerJs($js, \yii\web\View::POS_END);
+?>

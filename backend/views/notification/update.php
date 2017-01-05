@@ -19,9 +19,21 @@ $this->params['breadcrumbs'][] = 'Update';
 
         <?php $form = ActiveForm::begin(['id' => 'updateNotificationForm']); ?>
 
+        <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+
         <?= $form->field($model, 'message')->textInput(['maxlength' => true]) ?>
 
-        <?= $form->field($model, 'time')->textInput() ?>
+        <?= $form->field($model, 'time')->widget(\kartik\widgets\TimePicker::className(), [
+            'addonOptions' => [
+                'asButton' => true,
+                'buttonOptions' => ['class' => 'btn btn-info']
+            ],
+            'pluginOptions' => [
+                'showSeconds' => false,
+                'showMeridian' => false,
+                'minuteStep' => 1,
+            ]
+        ]) ?>
 
         <?= $form->field($model, 'url')->textInput() ?>
 

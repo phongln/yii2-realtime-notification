@@ -19,7 +19,7 @@ class NotificationSearch extends Notification
     {
         return [
             [['id', 'status', 'created_by', 'updated_by'], 'integer'],
-            [['message', 'time', 'created_at', 'updated_at'], 'safe'],
+            [['title', 'message', 'time', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -77,6 +77,7 @@ class NotificationSearch extends Notification
             'updated_by' => $this->updated_by,
         ]);
 
+        $query->andFilterWhere(['like', 'title', $this->message]);
         $query->andFilterWhere(['like', 'message', $this->message]);
 
         return $dataProvider;

@@ -9,6 +9,7 @@ use yii\helpers\Html;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
+            'title',
             'message',
             'time',
             [
@@ -40,8 +41,38 @@ use yii\helpers\Html;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => $default ? '{view}{update}{delete}' : '{view}{delete}'
+                'template' => $default ? '{view}{update}{delete}' : '{view}{delete}{refresh}',
+                'buttons' => [
+                    'refresh' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-refresh"></span>', 'javascript:void(0);', [
+                            'title' => Yii::t('app', 'Refresh'),
+                            'class' => 'refreshNotificationBtn',
+                            'data-id' => $model->id
+                        ]);
+                    }
+                ]
             ],
         ],
     ]); ?>
 </div>
+<?php
+$param_io_connect = Yii::$app->params['io_connect'];
+$refreshLink = Yii::$app->params['domain'] . 'notification/refresh';
+$js=<<<JS
+var socket = io.connect('$param_io_connect');
+// var socket = io.connect('http://125.212.210.113:8890');
+$(".refreshNotificationBtn").click(function() {
+    var id = $(this).data("id");
+    $.ajax({
+        url: '$refreshLink',
+        type: 'post',
+        data: {id: id},
+        success: function (resp) {
+            socket.emit('notification', resp);
+            window.location.href = resp.reloadLink;
+        }
+    });
+});
+JS;
+$this->registerJs($js, \yii\web\View::POS_END);
+?>

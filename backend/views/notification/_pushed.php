@@ -14,11 +14,32 @@ use yii\helpers\Html;
 
         <?= \yii\bootstrap\Html::hiddenInput('tab', 'pushed') ?>
 
+        <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+
         <?= $form->field($model, 'message')->textInput(['maxlength' => true]) ?>
 
-        <?= $form->field($model, 'time')->textInput() ?>
-
         <?= $form->field($model, 'url')->textInput() ?>
+
+        <div class="checkbox">
+            <label style="font-weight: bold;">
+                <?= \yii\bootstrap\Html::checkbox('instant', 0, ['id' => 'instantPushed']) ?> Instant Pushed
+            </label>
+        </div>
+
+        <?= $form->field($model, 'time', ['options' => ['class' => 'hide']])->widget(\kartik\widgets\TimePicker::className(), [
+            'containerOptions' => [
+                'class' => 'pushedNotification',
+            ],
+            'addonOptions' => [
+                'asButton' => true,
+                'buttonOptions' => ['class' => 'btn btn-info']
+            ],
+            'pluginOptions' => [
+                'showSeconds' => false,
+                'showMeridian' => false,
+                'minuteStep' => 1,
+            ]
+        ]) ?>
 
         <?= $form->field($model, 'status')->hiddenInput(['value' => 0])->label(false) ?>
 
@@ -35,3 +56,23 @@ use yii\helpers\Html;
     'searchModel' => $searchModel,
     'default' => false
 ]) ?>
+<?php
+$js=<<<JS
+$("#instantPushed").change(function() {
+    var currentTime = /(..)(:..)/.exec(new Date());
+    var parentPushed = $(".pushedNotification").parents(".field-notification-time");
+    if($(this).is(":checked")) {
+        $(this).val(1);
+        $(".pushedNotification").val(currentTime[0]);        
+        $(parentPushed).removeClass("show");
+        $(parentPushed).addClass("hide");
+    } else {
+        $(this).val(0);
+        $(".pushedNotification").val('');
+        $(parentPushed).removeClass("hide");
+        $(parentPushed).addClass("show");
+    }
+});
+JS;
+$this->registerJs($js, \yii\web\View::POS_END);
+?>

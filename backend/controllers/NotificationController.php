@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Notification;
 use app\models\NotificationSearch;
+use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -22,6 +23,17 @@ class NotificationController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'create', 'update', 'delete', 'view', 'refresh'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -31,19 +43,49 @@ class NotificationController extends Controller
         ];
     }
 
+    /**
+     * Get initial config for extension
+     * @author PhongLN <phong.ln@vinixcorp.com.vn>
+     * @return mixed
+     */
     public function actionInitial()
     {
         $req = Yii::$app->request;
         Yii::$app->response->format = Response::FORMAT_JSON;
-        if($req->isGet) {
-            return ['defaultData' => json_encode(Notification::getDefaultNotification())];
+        if($req->isGet && $req->get('secret') == Yii::$app->params['secretForInitialNotification']) {
+            return ['defaultData' => json_encode(Notification::getDefaultNotification()), 'secret' => $req->get('secret')];
         }
 
         return [];
     }
 
     /**
+     * Re-push notification with specific id
+     * @author PhongLN <phong.ln@vinixcorp.com.vn>
+     * @return mixed
+     */
+    public function actionRefresh()
+    {
+        $req = Yii::$app->request;
+        $model = $this->findModel($req->post('id'));
+
+        if($req->isAjax && $req->isPost && !empty($model)) {
+            $tab = $model->status == 1 ? 'default' : 'pushed';
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            Yii::$app->session->setFlash('success-message', ucfirst($tab) . ' notification was refresh successfully.');
+
+            if($tab == 'pushed') {
+                return [
+                    'type' => $tab, 'time' => $model->time, 'title' => $model->title, 'message' => $model->message,
+                    'url' => $model->url, 'reloadLink' => Url::to(['index', 'tab' => $tab])
+                ];
+            }
+        }
+    }
+
+    /**
      * Lists all Notification models.
+     * @author PhongLN <phong.ln@vinixcorp.com.vn>
      * @return mixed
      */
     public function actionIndex($tab = 'pushed')
@@ -61,12 +103,12 @@ class NotificationController extends Controller
             if (!empty($req->post()) && $model->load($req->post()) && $model->save()) {
                 Yii::$app->session->setFlash('success-message', ucfirst($tab) . ' notification was created successfully.');
             } else {
-                Yii::$app->session->setFlash('error-message', implode(', ', $model->errors));
+                Yii::$app->session->setFlash('error-message', d1($model->errors));
             }
 
             if($tab == 'pushed') {
                 return [
-                    'type' => $tab, 'time' => $model->time, 'message' => $model->message,
+                    'type' => $tab, 'time' => $model->time, 'title' => $model->title, 'message' => $model->message,
                     'url' => $model->url, 'reloadLink' => Url::to(['index', 'tab' => $tab])
                 ];
             } else {
@@ -87,6 +129,7 @@ class NotificationController extends Controller
 
     /**
      * Displays a single Notification model.
+     * @author PhongLN <phong.ln@vinixcorp.com.vn>
      * @param integer $id
      * @return mixed
      */
@@ -101,6 +144,7 @@ class NotificationController extends Controller
      * Creates a new Notification model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
+     * @author PhongLN <phong.ln@vinixcorp.com.vn>
      */
     public function actionCreate()
     {
@@ -120,6 +164,7 @@ class NotificationController extends Controller
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
+     * @author PhongLN <phong.ln@vinixcorp.com.vn>
      */
     public function actionUpdate($id)
     {
@@ -138,7 +183,7 @@ class NotificationController extends Controller
 
             if($tab == 'pushed') {
                 return [
-                    'type' => $tab, 'time' => $model->time, 'message' => $model->message,
+                    'type' => $tab, 'time' => $model->time, 'title' => $model->title, 'message' => $model->message,
                     'url' => $model->url, 'reloadLink' => Url::to(['index', 'tab' => $tab])
                 ];
             } else {
@@ -158,6 +203,7 @@ class NotificationController extends Controller
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
+     * @author PhongLN <phong.ln@vinixcorp.com.vn>
      */
     public function actionDelete($id)
     {
@@ -172,6 +218,7 @@ class NotificationController extends Controller
      * @param integer $id
      * @return Notification the loaded model
      * @throws NotFoundHttpException if the model cannot be found
+     * @author PhongLN <phong.ln@vinixcorp.com.vn>
      */
     protected function findModel($id)
     {

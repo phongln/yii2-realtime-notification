@@ -13,6 +13,7 @@ class m170104_015438_create_table_notifications extends Migration
 
         $this->createTable('{{%notification}}', [
             'id' => $this->primaryKey(),
+            'title' => $this->string(255)->notNull(),
             'message' => $this->string(255)->notNull(),
             'time' => $this->string(5)->notNull(),
             'status' => $this->smallInteger(1)->notNull()->defaultValue(1),
