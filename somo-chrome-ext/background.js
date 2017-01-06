@@ -2,9 +2,12 @@
 //*DEFAULT CONFIG*//
 /******************/
 var secret = 'dc9b9efd3e02d2e6e2800fb2b61421f7';
+// Production config
 var domain = 'http://chromeext.somo.vn/';
-// var domain = 'http://chrome-ext-notification.dev/';
 var io_connect = 'http://125.212.210.113:8890';
+
+// Development config
+// var domain = 'http://chrome-ext-notification.dev/';
 // var io_connect = 'http://127.0.0.1:8890';
 
 /**************************************/

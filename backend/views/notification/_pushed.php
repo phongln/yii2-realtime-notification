@@ -59,8 +59,6 @@ use yii\helpers\Html;
 <?php
 $js=<<<JS
 $("#instantPushed").change(function() {
-    var currentTime = /(..)(:..)/.exec(new Date());
-    $(".pushedNotification").val(currentTime[0]); 
     var parentPushed = $(".pushedNotification").parents(".field-notification-time");
     if($(this).is(":checked")) {
         $(this).val(1);

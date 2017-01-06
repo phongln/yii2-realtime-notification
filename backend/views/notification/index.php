@@ -62,8 +62,10 @@ $(document).ready(function () {
     }
 
     $("#pushBtn").click(function () {
-        var currentTime = /(..)(:..)/.exec(new Date());
-        $(".pushedNotification").val(currentTime[0]);
+        if($('#instantPushed').is(":checked")) {
+            var currentTime = /(..)(:..)/.exec(new Date());
+            $(".pushedNotification").val(currentTime[0]);        
+        }
         submitFormByAjax($('#notificationForm'));
     });
     $("#changeBtn").click(function () {
