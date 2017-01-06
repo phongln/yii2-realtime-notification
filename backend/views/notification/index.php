@@ -63,18 +63,7 @@ $(document).ready(function () {
 
     $("#pushBtn").click(function () {
         var currentTime = /(..)(:..)/.exec(new Date());
-        var parentPushed = $(".pushedNotification").parents(".field-notification-time");
-        if($('#instantPushed').is(":checked")) {
-            $('#instantPushed').val(1);
-            $(".pushedNotification").val(currentTime[0]);        
-            $(parentPushed).removeClass("show");
-            $(parentPushed).addClass("hide");
-        } else {
-            $('#instantPushed').val(0);
-            $(".pushedNotification").val('');
-            $(parentPushed).removeClass("hide");
-            $(parentPushed).addClass("show");
-        }
+        $(".pushedNotification").val(currentTime[0]);
         submitFormByAjax($('#notificationForm'));
     });
     $("#changeBtn").click(function () {

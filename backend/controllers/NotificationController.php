@@ -44,16 +44,16 @@ class NotificationController extends Controller
     }
 
     /**
-     * Get initial config for extension
+     * Get default notifications for extension
      * @author PhongLN <phong.ln@vinixcorp.com.vn>
      * @return mixed
      */
-    public function actionInitial()
+    public function actionGetDefaultNotifications()
     {
         $req = Yii::$app->request;
         Yii::$app->response->format = Response::FORMAT_JSON;
         if($req->isGet && $req->get('secret') == Yii::$app->params['secretForInitialNotification']) {
-            return ['defaultData' => json_encode(Notification::getDefaultNotification()), 'secret' => $req->get('secret')];
+            return ['defaultData' => json_encode(Notification::getDefaultNotification())];
         }
 
         return [];
@@ -113,7 +113,7 @@ class NotificationController extends Controller
                 ];
             } else {
                 return [
-                    'type' => $tab, 'defaultData' => json_encode(Notification::getDefaultNotification()), 'reloadLink' => Url::to(['index', 'tab' => $tab])
+                    'type' => $tab, 'reloadLink' => Url::to(['index', 'tab' => $tab])
                 ];
             }
         }

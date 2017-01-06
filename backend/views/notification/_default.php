@@ -13,13 +13,16 @@ use yii\helpers\Html;
 
         <?= \yii\bootstrap\Html::hiddenInput('tab', 'default') ?>
 
-        <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'title')->textInput(['maxlength' => true, 'autofocus' => true]) ?>
 
-        <?= $form->field($model, 'message')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'message')->textInput(['maxlength' => true, 'autofocus' => true]) ?>
 
         <?= $form->field($model, 'url')->textInput() ?>
 
         <?= $form->field($model, 'time')->widget(\kartik\widgets\TimePicker::className(), [
+            'options' => [
+                'id' => 'default-notification-time'
+            ],
             'addonOptions' => [
                 'asButton' => true,
                 'buttonOptions' => ['class' => 'btn btn-info']
@@ -34,7 +37,7 @@ use yii\helpers\Html;
         <?= $form->field($model, 'status')->hiddenInput(['value' => 1])->label(false) ?>
 
         <div class="form-group">
-            <?= Html::button('Change default configuration', ['class' => 'btn btn-primary', 'id' => 'changeBtn']) ?>
+            <?= Html::button('Add default configuration', ['class' => 'btn btn-primary', 'id' => 'changeBtn']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>

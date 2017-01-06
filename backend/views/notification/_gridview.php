@@ -41,7 +41,7 @@ use yii\helpers\Html;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => $default ? '{view}{update}{delete}' : '{view}{delete}{refresh}',
+                'template' => $default ? '{update}{delete}' : '{view}{delete}{refresh}',
                 'buttons' => [
                     'refresh' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-refresh"></span>', 'javascript:void(0);', [

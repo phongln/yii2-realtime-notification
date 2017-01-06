@@ -10,7 +10,6 @@ $this->title = 'Update Notification: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Notifications', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
-\app\assets\NotificationAsset::register($this);
 ?>
 <div class="notification-update">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -45,3 +44,26 @@ $this->params['breadcrumbs'][] = 'Update';
 
     </div>
 </div>
+<?php
+$param_io_connect = Yii::$app->params['io_connect'];
+$js=<<<JS
+$(document).ready(function () {
+    var socket = io.connect('$param_io_connect');
+    function submitFormByAjax(form) {
+        $.ajax({
+            url: form.attr('action'),
+            type: 'post',
+            data: form.serialize(),
+            success: function (resp) {
+                socket.emit('notification', resp);
+                window.location.href = resp.reloadLink;
+            }
+        });
+    }
+    $("#updateBtn").click(function () {
+        submitFormByAjax($('#updateNotificationForm'));
+    });
+});
+JS;
+$this->registerJs($js, \yii\web\View::POS_END);
+?>

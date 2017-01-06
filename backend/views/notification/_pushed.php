@@ -14,9 +14,9 @@ use yii\helpers\Html;
 
         <?= \yii\bootstrap\Html::hiddenInput('tab', 'pushed') ?>
 
-        <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'title')->textInput(['maxlength' => true, 'autofocus' => true]) ?>
 
-        <?= $form->field($model, 'message')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'message')->textInput(['maxlength' => true, 'autofocus' => true]) ?>
 
         <?= $form->field($model, 'url')->textInput() ?>
 
@@ -26,9 +26,9 @@ use yii\helpers\Html;
             </label>
         </div>
 
-        <?= $form->field($model, 'time', ['options' => ['class' => 'hide']])->widget(\kartik\widgets\TimePicker::className(), [
-            'containerOptions' => [
-                'class' => 'pushedNotification',
+        <?= $form->field($model, 'time')->widget(\kartik\widgets\TimePicker::className(), [
+            'options' => [
+                'class' => 'pushedNotification'
             ],
             'addonOptions' => [
                 'asButton' => true,
@@ -60,15 +60,14 @@ use yii\helpers\Html;
 $js=<<<JS
 $("#instantPushed").change(function() {
     var currentTime = /(..)(:..)/.exec(new Date());
+    $(".pushedNotification").val(currentTime[0]); 
     var parentPushed = $(".pushedNotification").parents(".field-notification-time");
     if($(this).is(":checked")) {
         $(this).val(1);
-        $(".pushedNotification").val(currentTime[0]);        
         $(parentPushed).removeClass("show");
         $(parentPushed).addClass("hide");
     } else {
         $(this).val(0);
-        $(".pushedNotification").val('');
         $(parentPushed).removeClass("hide");
         $(parentPushed).addClass("show");
     }
